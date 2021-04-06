@@ -9,6 +9,7 @@ class Contest(SqlAlchemyBase):
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     contest_type = sqlalchemy.Column(sqlalchemy.String)
     solving_processes = orm.relation('SolvingProcess')
+    secret_key = sqlalchemy.Column(sqlalchemy.String)
 
 
 class SolvingProcess(SqlAlchemyBase):
