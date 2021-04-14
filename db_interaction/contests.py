@@ -8,7 +8,8 @@ class Contest(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     contest_type = sqlalchemy.Column(sqlalchemy.String)
-    solving_processes = orm.relation('SolvingProcess')
+    secret_key = sqlalchemy.Column(sqlalchemy.String)
+    contest_id = sqlalchemy.Column('solving_processes', sqlalchemy.Integer, sqlalchemy.ForeignKey('solving_processes.id'))
 
 
 class SolvingProcess(SqlAlchemyBase):

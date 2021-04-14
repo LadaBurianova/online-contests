@@ -8,6 +8,7 @@ class Team(SqlAlchemyBase):
     __tablename__ = 'teams'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     current_result = sqlalchemy.Column(sqlalchemy.Integer)  # баллы
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
 
 
 class User(SqlAlchemyBase):
