@@ -7,7 +7,7 @@
 <br>
 <form action="" method="post">
     {{ form.hidden_tag() }}
-
+    {{ form.csrf_token }}
     <p>
         {{ form.email.label }}<br>
         {{ form.email(class="form-control") }}<br>
