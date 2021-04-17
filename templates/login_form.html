@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<br>
+<h3>Авторизация</h3>
+<br>
+<form action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control", type="email") }}<br>
+        {% for error in form.email.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(class="form-control", type="password") }}<br>
+        {% for error in form.password.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+
+    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    {{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <nav>
+        {% if current_user.is_authenticated %}
+        <p>
+            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+        {% else %}
+        </p>
+        <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+        {% endif %}
+    </nav>
+    <br>
+        <div>{{ message }}</div>
+    
+</form>
+{% if form.errors %}
+{{ form.errors }}
+{% endif %}
+{% endblock %}

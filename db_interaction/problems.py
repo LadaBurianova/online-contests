@@ -8,7 +8,6 @@ class Line(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     bonus_available = sqlalchemy.Column(sqlalchemy.Boolean)
     bonus = sqlalchemy.Column(sqlalchemy.Integer)
-    problem_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("problems.id"))
 
 
 class Problem(SqlAlchemyBase):
@@ -18,5 +17,6 @@ class Problem(SqlAlchemyBase):
     problem_text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     picture_link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     correct_answer = sqlalchemy.Column(sqlalchemy.String)
+    score = sqlalchemy.Column(sqlalchemy.Integer)
     line_id = sqlalchemy.Column(sqlalchemy.Integer)
     line = orm.relation('Line')
