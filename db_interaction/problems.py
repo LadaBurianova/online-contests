@@ -8,6 +8,7 @@ class Line(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     bonus_available = sqlalchemy.Column(sqlalchemy.Boolean)
     bonus = sqlalchemy.Column(sqlalchemy.Integer)
+    problem_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("problems.id"))
 
 
 class Problem(SqlAlchemyBase):
