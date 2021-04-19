@@ -7,7 +7,6 @@ class Contest(SqlAlchemyBase):
     __tablename__ = 'contests'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    contest_type = sqlalchemy.Column(sqlalchemy.String)
     secret_key = sqlalchemy.Column(sqlalchemy.String)
     contest_id = sqlalchemy.Column('solving_processes', sqlalchemy.Integer, sqlalchemy.ForeignKey('solving_processes.id'))
 

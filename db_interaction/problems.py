@@ -10,4 +10,3 @@ class Problem(SqlAlchemyBase):
     problem_text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     picture_link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     correct_answer = sqlalchemy.Column(sqlalchemy.String)
-    score = sqlalchemy.Column(sqlalchemy.Integer)
