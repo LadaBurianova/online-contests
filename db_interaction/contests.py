@@ -15,8 +15,6 @@ class Contest(SqlAlchemyBase):
 class SolvingProcess(SqlAlchemyBase):
     __tablename__ = "solving_processes"
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    team_id = sqlalchemy.Column(sqlalchemy.Integer)
-    problem_id = sqlalchemy.Column(sqlalchemy.Integer)
     time = sqlalchemy.Column(sqlalchemy.Time)
     ok = sqlalchemy.Column(sqlalchemy.Integer)
     solving_process = orm.relation('Contest')
