@@ -3,6 +3,9 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction.teams import User
+from db_interaction.contests import SolvingProcess
+from random import shuffle
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -61,6 +64,18 @@ def register():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/check')
+def check():  # not finished
+    db_sess = __db_session.create_session()
+    data = []
+    for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
+        d = {'command': i.command_id, 'problem': i.problem_id}
+        pass
+    shuffle(data)
+    render_template("checking_page.html", answers=data)
+
 
 
 if __name__ == "__main__":
