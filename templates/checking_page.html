@@ -1,17 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <table>
-            <tr><th>КОМАНДА</th><th>ЗАДАЧА</th><th>ВЕРНЫЙ ОТВЕТ</th><th>ОТВЕТ КОМАНДЫ</th><th>ПРОВЕРКА</th></tr>
-            {% for ans in answers %}
-            <tr><td>{% ans.team_id %}</td><td>ans.problem_id</td><td>ans.correct_answer</td><td>ans.answer</td><td>
-                <form action="" method="post">
-            <p>
-            <input type="number" max="1" step="1">
-            <input type="submit" value="Отправить">
-	        </p>
-                </form>
-            </td></tr>
-            {% endfor %}
-        </table>
+<table>
+    <tr>
+        <th>КОМАНДА</th>
+        <th>ЗАДАЧА</th>
+        <th>ВЕРНЫЙ ОТВЕТ</th>
+        <th>ОТВЕТ КОМАНДЫ</th>
+        <th>ПРОВЕРКА</th>
+    </tr>
+    {% for item in answers %}
+    <tr>
+        {% for cl in item %}
+        <td>
+        {{ cl }}
+        </td>
+        {% endfor %}
+    </tr>
+        {% endfor %}
+</table>
 {% endblock %}

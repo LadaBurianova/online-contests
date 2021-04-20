@@ -66,16 +66,17 @@ def logout():
     return redirect("/")
 
 
-@app.route('/check')
-def check():  # not finished
+@app.route('/check', methods=['GET', 'POST'])
+def check():
     db_sess = __db_session.create_session()
     data = []
     for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
-        d = {'command': i.command_id, 'problem': i.problem_id}
-        pass
+        d = [i.team_id, i.problem_id, 1, 1] # i.problem.correct_answer, i.answer
+        print(d)
+        data.append(d)
     shuffle(data)
-    render_template("checking_page.html", answers=data)
-
+    print(data)
+    return render_template("checking_page.html", answers=data)
 
 
 if __name__ == "__main__":
