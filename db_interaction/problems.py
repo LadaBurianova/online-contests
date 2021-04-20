@@ -1,23 +1,12 @@
 import sqlalchemy
 from .__db_session import SqlAlchemyBase
-import sqlalchemy.orm as orm
-
-
-class Line(SqlAlchemyBase):
-    __tablename__ = 'lines'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    bonus_available = sqlalchemy.Column(sqlalchemy.Boolean)
-    bonus = sqlalchemy.Column(sqlalchemy.Integer)
-    problem_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("problems.id"))
 
 
 class Problem(SqlAlchemyBase):
     __tablename__ = 'problems'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    number = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    number = sqlalchemy.Column(sqlalchemy.Integer)  # number - номер строчки. Баллы - то же число.
+    category = sqlalchemy.Column(sqlalchemy.String)  # category - название типа задач (колонки)
     problem_text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     picture_link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     correct_answer = sqlalchemy.Column(sqlalchemy.String)
-    score = sqlalchemy.Column(sqlalchemy.Integer)
-    line_id = sqlalchemy.Column(sqlalchemy.Integer)
-    line = orm.relation('Line')

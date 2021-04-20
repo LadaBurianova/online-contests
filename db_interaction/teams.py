@@ -1,4 +1,6 @@
 import sqlalchemy
+from sqlalchemy.types import JSON
+from sqlalchemy.schema import Column
 from .__db_session import SqlAlchemyBase
 import sqlalchemy.orm as orm
 from flask_login import UserMixin
@@ -9,6 +11,8 @@ class Team(SqlAlchemyBase):
     __tablename__ = 'teams'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     current_result = sqlalchemy.Column(sqlalchemy.Integer)  # баллы
+    secret_code = sqlalchemy.Column(sqlalchemy.Integer)
+    results = Column('data', JSON)
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
 
 
