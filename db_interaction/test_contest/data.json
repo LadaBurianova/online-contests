@@ -1,0 +1,120 @@
+{
+  "contest": {
+    "title": "test contest",
+    "secret_key": ""
+  },
+  "problems": [
+    {
+      "number": "10",
+      "category": "арифметика",
+      "text": "2+2",
+      "link": "",
+      "answer": "4"
+    },
+    {
+      "number": "20",
+      "category": "арифметика",
+      "text": "23 ** 2",
+      "link": "",
+      "answer": "529"
+    },
+    {
+      "number": "30",
+      "category": "арифметика",
+      "text": "",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "40",
+      "category": "арифметика",
+      "text": "",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "10",
+      "category": "1",
+      "text": "текст11",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "20",
+      "category": "1",
+      "text": "текст12",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "30",
+      "category": "1",
+      "text": "текст13",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "40",
+      "category": "1",
+      "text": "текст14",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "10",
+      "category": "2",
+      "text": "текст21",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "20",
+      "category": "2",
+      "text": "текст22",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "30",
+      "category": "2",
+      "text": "текст23",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "40",
+      "category": "2",
+      "text": "текст24",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "10",
+      "category": "3",
+      "text": "текст31",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "20",
+      "category": "3",
+      "text": "текст32",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "30",
+      "category": "3",
+      "text": "текст33",
+      "link": "",
+      "answer": "не знаю"
+    },
+    {
+      "number": "40",
+      "category": "3",
+      "text": "текст34",
+      "link": "",
+      "answer": "не знаю"
+    }
+  ]
+}
