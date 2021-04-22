@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
@@ -68,15 +68,17 @@ def logout():
 
 @app.route('/check', methods=['GET', 'POST'])
 def check():
+    if request.method == 'POST':
+        ok = request.form.get('accept')
+
+        print(ok)
+
     db_sess = __db_session.create_session()
     data = []
-    for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
-        d = [i.team_id, i.problem_id, 1, 1] # i.problem.correct_answer, i.answer
-        print(d)
-        data.append(d)
-    shuffle(data)
-    print(data)
-    return render_template("checking_page.html", answers=data)
+    i = db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2).first()
+    print(i)
+    d = [i.team_id, i.problem_id, i.problem.correct_answer, i.answer]  # i.problem.correct_answer, i.answer
+    return render_template("checking_page.html", answers=d)
 
 
 if __name__ == "__main__":
