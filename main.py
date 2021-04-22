@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
@@ -9,6 +9,10 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+def check_answers(answer, team):    # HERE YOU CHECK ANSWERS
+    pass
 
 
 @login_manager.user_loader
@@ -54,6 +58,14 @@ def register():
         db_sess.commit()
         return redirect('/login')
     return render_template('register_form.html', title='Регистрация', form=form)
+
+
+@app.route('/solving', methods=['POST'])
+def solving():
+    if request.method == 'POST':
+        check_answers(dict(request.form), 'TEAM')   # ADD WHICH TEAM SUBMITTED
+        return redirect('/solving')
+    return render_template('thing.html', problems=[])   # ADD PROBLEMS
 
 
 @app.route('/logout')
