@@ -1,5 +1,6 @@
 import sqlalchemy
 from .__db_session import SqlAlchemyBase
+import sqlalchemy.orm as orm
 
 
 class Problem(SqlAlchemyBase):
@@ -10,3 +11,4 @@ class Problem(SqlAlchemyBase):
     problem_text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     picture_link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     correct_answer = sqlalchemy.Column(sqlalchemy.String)
+    solving_process = orm.relation("SolvingProcess", back_populates='problem')

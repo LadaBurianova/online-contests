@@ -7,8 +7,10 @@ class Contest(SqlAlchemyBase):
     __tablename__ = 'contests'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    secret_key = sqlalchemy.Column(sqlalchemy.String)
-    contest_id = sqlalchemy.Column('solving_processes', sqlalchemy.Integer, sqlalchemy.ForeignKey('solving_processes.id'))
+    secret_key = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    solving_process_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                           sqlalchemy.ForeignKey("solving_processes.id"))
+    solving_process = orm.relation('SolvingProcess')
 
 
 class SolvingProcess(SqlAlchemyBase):
@@ -16,6 +18,8 @@ class SolvingProcess(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     ok = sqlalchemy.Column(sqlalchemy.Integer)
     answer = sqlalchemy.Column(sqlalchemy.String)
-    solving_process = orm.relation('Contest')
-    team_id = sqlalchemy.Column('teams', sqlalchemy.Integer, sqlalchemy.ForeignKey('teams.id'))
-    problem_id = sqlalchemy.Column('problems', sqlalchemy.Integer, sqlalchemy.ForeignKey('problems.id'))
+    contest = orm.relation('Contest', back_populates='solving_process')
+    team = orm.relation('Team')
+    team_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("teams.id"))
+    problem = orm.relation('Problem')
+    problem_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("problems.id"))

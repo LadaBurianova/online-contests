@@ -13,7 +13,8 @@ class Team(SqlAlchemyBase):
     current_result = sqlalchemy.Column(sqlalchemy.Integer)  # баллы
     secret_code = sqlalchemy.Column(sqlalchemy.Integer)
     results = Column('data', JSON)
-    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    user = orm.relation('User', back_populates='team')
+    solving_process = orm.relation('SolvingProcess', back_populates='team')
 
 
 class User(SqlAlchemyBase, UserMixin):
@@ -24,6 +25,8 @@ class User(SqlAlchemyBase, UserMixin):
     name = sqlalchemy.Column(sqlalchemy.String)
     nickname = sqlalchemy.Column(sqlalchemy.String, unique=True)
     password = sqlalchemy.Column(sqlalchemy.String)
+    team_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("teams.id"))
     team = orm.relation('Team')
 
     def set_password(self, password):
