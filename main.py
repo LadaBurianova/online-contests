@@ -7,7 +7,6 @@ from db_interaction.contests import SolvingProcess
 from db_interaction.problems import Problem
 from random import shuffle
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
@@ -43,6 +42,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """Registration form. redirects to main if everything is correct."""
     form = RegistrationForm()
     if form.validate_on_submit():
         if form.password.data != form.password_copy.data:
@@ -56,7 +56,7 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/main')
     return render_template('register_form.html', title='Регистрация', form=form)
 
 
@@ -69,16 +69,22 @@ def logout():
 
 @app.route('/check', methods=['GET', 'POST'])
 def check():
+    """Page for checking answers. Button 0- for wrong, 1- for correct."""
     if request.method == 'POST':
+        db_sess = __db_session.create_session()
         data = request.form.to_dict()
-        print(data)
+        ok = int(list(data.keys())[0]) % 2
+        pr_id, t_id = map(int, list(data.values())[0].split('&'))
+        process = db_sess.query(SolvingProcess).filter(SolvingProcess.team_id == t_id, SolvingProcess.problem_id == pr_id).first()
+        print(process)
+        process.ok = ok
+        db_sess.commit()
     db_sess = __db_session.create_session()
     data = []
-    counter = 1
+    counter = 0
     for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
-        pr = i.problem
-        print([i.team, pr.id, pr.correct_answer, i.answer, str(counter), str(counter + 1)])
-        data.append([i.team, pr.id, pr.correct_answer, i.answer, str(counter), str(counter + 1)])  # i.problem.correct_answer, i.answer
+        data.append([i, str(counter), str(counter + 1),
+                     str(i.problem.id) + '&' + str(i.team.id)])  # i.problem.correct_answer, i.answer
         counter += 2
     return render_template("checking_page.html", answers=data)
 

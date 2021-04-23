@@ -11,13 +11,13 @@
     </tr>
     {% for ans in answers %}
     <tr>
-            <form action="/check" method="POST">
-                <td>{{ans[0].id}}</td>
-                <td>{{ans[1]}}</td>
-                <td>{{ans[2]}}</td>
-                <td>{{ans[3]}}</td>
-                <td><button type="submit" name={{ans[4]}}> 0 </button>
-                <button type="submit" name={{ans[5]}}> 1 </button></td>
+            <form method="POST">
+                <td>{{ans[0].team.id}}</td>
+                <td>{{ans[0].problem.id}}</td>
+                <td>{{ans[0].problem.correct_answer}}</td>
+                <td>{{ans[0].answer}}</td>
+                <td><button type="submit" name={{ans[1]}} value={{ans[3]}}> 0 </button>
+                <button type="submit" name={{ans[2]}}  value={{ans[3]}}> 1 </button></td>
             </form>
     </tr>
     {% endfor %}

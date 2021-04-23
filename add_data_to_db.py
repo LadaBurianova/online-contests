@@ -11,8 +11,9 @@ def add_from_json():
     contest.title = data['contest']['title']
     contest.secret_key = data['contest']['secret_key']
     db_sess.add(contest)
-    team_1 = __all_tables.teams.Team()
-    team_2 = __all_tables.teams.Team()
+
+    team_1 = __all_tables.teams.Team(results=json.dumps([['?'] * 4 for _ in range(4)], ensure_ascii=False))
+    team_2 = __all_tables.teams.Team(results=json.dumps([['?'] * 4 for _ in range(4)], ensure_ascii=False))
     db_sess.add(team_1)
     db_sess.add(team_2)
     user_1 = __all_tables.teams.User(email='user_1@mail.ru', surname='Иванов', name='Иван', nickname='user_1',
