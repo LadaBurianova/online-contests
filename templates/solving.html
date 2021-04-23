@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ваши задачи</title>
+</head>
+<body>
+<h3>Задачи</h3>
+{% for problem in problems %}
+    <p>{{problem[1]}}</p>
+    <form method="POST">
+        <input type="text" placeholder="Ваш ответ" name="answer">
+        <button type="submit" name={{problem[0]}}>Сдать
+            задачу</button>
+    </form>
+{% endfor %}
+</body>
+</html>
