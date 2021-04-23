@@ -14,7 +14,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-def check_answers(answer, team):    # HERE YOU CHECK ANSWERS
+def check_answers(answer, team):  # HERE YOU CHECK ANSWERS
     print(answer['answer'])
 
 
@@ -67,16 +67,37 @@ def register():
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
     if request.method == 'POST':
-        check_answers(dict(request.form), 'TEAM')   # ADD WHICH TEAM SUBMITTED
+        check_answers(dict(request.form), 'TEAM')  # ADD WHICH TEAM SUBMITTED
         return redirect('/solving')
     return render_template('solving.html', problems=[
         (1, 'blah blah blah', 0), (2, 'something something', 1), (3, 'nvm', 2)
-    ])   # ADD PROBLEMS
+    ])  # ADD PROBLEMS
+
+
+@app.route('/check', methods=['GET', 'POST'])
+def check():
+    """Page for checking answers. Button 0- for wrong, 1- for correct."""
+    if request.method == 'POST':
+        db_sess = __db_session.create_session()
+        data = request.form.to_dict()
+        ok = int(list(data.keys())[0]) % 2
+        pr_id, t_id = map(int, list(data.values())[0].split('&'))  # problem_id and team_id from form
+        process = db_sess.query(SolvingProcess).filter(SolvingProcess.team_id == t_id,
+                                                       SolvingProcess.problem_id == pr_id).first()
+        process.ok = ok
+        db_sess.commit()
+    db_sess = __db_session.create_session()
+    data = []
+    counter = 0
+    for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
+        data.append([i, str(counter), str(counter + 1), str(i.problem.id) + '&' + str(i.team.id)])
+        counter += 2
+    return render_template("checking_page.html", answers=data)
 
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    return render_template('results.html',              # ADD BOTH LISTS
+    return render_template('results.html',  # ADD BOTH LISTS
                            results=[('команда1', [
                                [1, 2, 3, 4],
                                [5, 6, 7, 8],
@@ -90,29 +111,7 @@ def results():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
-
-
-@app.route('/check', methods=['GET', 'POST'])
-def check():
-    """Page for checking answers. Button 0- for wrong, 1- for correct."""
-    if request.method == 'POST':
-        db_sess = __db_session.create_session()
-        data = request.form.to_dict()
-        ok = int(list(data.keys())[0]) % 2
-        pr_id, t_id = map(int, list(data.values())[0].split('&'))
-        process = db_sess.query(SolvingProcess).filter(SolvingProcess.team_id == t_id, SolvingProcess.problem_id == pr_id).first()
-        print(process)
-        process.ok = ok
-        db_sess.commit()
-    db_sess = __db_session.create_session()
-    data = []
-    counter = 0
-    for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
-        data.append([i, str(counter), str(counter + 1),
-                     str(i.problem.id) + '&' + str(i.team.id)])  # i.problem.correct_answer, i.answer
-        counter += 2
-    return render_template("checking_page.html", answers=data)
+    return redirect("/main")
 
 
 if __name__ == "__main__":
