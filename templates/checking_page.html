@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>КОМАНДА</th>
+        <th>ЗАДАЧА</th>
+        <th>ВЕРНЫЙ ОТВЕТ</th>
+        <th>ОТВЕТ КОМАНДЫ</th>
+        <th>ПРОВЕРКА</th>
+    </tr>
+    {% for ans in answers %}
+    <tr>
+            <form method="POST">
+                <td>{{ans[0].team.id}}</td>
+                <td>{{ans[0].problem.id}}</td>
+                <td>{{ans[0].problem.correct_answer}}</td>
+                <td>{{ans[0].answer}}</td>
+                <td><button type="submit" name={{ans[1]}} value={{ans[3]}}> 0 </button>
+                <button type="submit" name={{ans[2]}}  value={{ans[3]}}> 1 </button></td>
+            </form>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
