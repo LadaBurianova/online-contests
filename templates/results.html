@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты</title>
+</head>
+<body>
+    {% for team, result, sum in results %}
+    <h2>{{team}}</h2>
+    <table border="1">
+        {% for row in result %}
+          <tr>
+              {% for elem in row %}
+                <td>{{elem}}</td>
+              {% endfor %}
+          </tr>
+        {% endfor %}
+
+    </table>
+    <p>Итог:{{sum[1]}}={{sum[0]}}</p>
+{% endfor %}
+<table border="1">
+    <tr>
+        {% for team in teams %}
+            <td>{{team[0]}}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for team in teams %}
+            <td>{{team[1]}}</td>
+        {% endfor %}
+    </tr>
+</table>
+</body>
+</html>

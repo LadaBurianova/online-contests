@@ -68,6 +68,18 @@ def solving():
     return render_template('thing.html', problems=[])   # ADD PROBLEMS
 
 
+@app.route('/results')
+def results():
+    return render_template('results.html',              # ADD BOTH LISTS
+                           results=[('команда1', [
+                               [1, 2, 3, 4],
+                               [5, 6, 7, 8],
+                               [9, 10, 11, 12],
+                               [13, 14, 15, 16]
+                           ], (136, '1+4+1+130'))],
+                           teams=[('команда1', 136)])
+
+
 @app.route('/logout')
 @login_required
 def logout():
