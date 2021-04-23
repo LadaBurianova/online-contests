@@ -74,10 +74,12 @@ def check():
         print(data)
     db_sess = __db_session.create_session()
     data = []
+    counter = 1
     for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
-        pr = i.problem_id
-        print(pr)
-        data.append([i.team_id, i.problem_id, pr.correct_answer, i.answer])  # i.problem.correct_answer, i.answer
+        pr = i.problem
+        print([i.team, pr.id, pr.correct_answer, i.answer, str(counter), str(counter + 1)])
+        data.append([i.team, pr.id, pr.correct_answer, i.answer, str(counter), str(counter + 1)])  # i.problem.correct_answer, i.answer
+        counter += 2
     return render_template("checking_page.html", answers=data)
 
 

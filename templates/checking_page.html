@@ -9,20 +9,16 @@
         <th>ОТВЕТ КОМАНДЫ</th>
         <th>ПРОВЕРКА</th>
     </tr>
-    {% for item in answers %}
-
+    {% for ans in answers %}
     <tr>
-        <form action="/check" method="POST">
-        {% for cl in item %}
-        <td>
-        {{ cl }}
-        </td>
-        {% endfor %}
-        <td>
-            <input type="submit" name="0" value='1'>
-            <input type="submit" name="0" value="0">
-        </form>
-        </td>
+            <form action="/check" method="POST">
+                <td>{{ans[0].id}}</td>
+                <td>{{ans[1]}}</td>
+                <td>{{ans[2]}}</td>
+                <td>{{ans[3]}}</td>
+                <td><button type="submit" name={{ans[4]}}> 0 </button>
+                <button type="submit" name={{ans[5]}}> 1 </button></td>
+            </form>
     </tr>
     {% endfor %}
 </table>
