@@ -12,7 +12,7 @@ login_manager.init_app(app)
 
 
 def check_answers(answer, team):    # HERE YOU CHECK ANSWERS
-    pass
+    print(answer['answer'])
 
 
 @login_manager.user_loader
@@ -60,15 +60,17 @@ def register():
     return render_template('register_form.html', title='Регистрация', form=form)
 
 
-@app.route('/solving', methods=['POST'])
+@app.route('/solving', methods=['GET', 'POST'])
 def solving():
     if request.method == 'POST':
         check_answers(dict(request.form), 'TEAM')   # ADD WHICH TEAM SUBMITTED
         return redirect('/solving')
-    return render_template('thing.html', problems=[])   # ADD PROBLEMS
+    return render_template('solving.html', problems=[
+        (1, 'blah blah blah', 0), (2, 'something something', 1), (3, 'nvm', 2)
+    ])   # ADD PROBLEMS
 
 
-@app.route('/results')
+@app.route('/results', methods=['GET', 'POST'])
 def results():
     return render_template('results.html',              # ADD BOTH LISTS
                            results=[('команда1', [
@@ -80,7 +82,7 @@ def results():
                            teams=[('команда1', 136)])
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()

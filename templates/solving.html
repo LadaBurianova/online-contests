@@ -5,13 +5,34 @@
 </head>
 <body>
 <h3>Задачи</h3>
-{% for problem in problems %}
-    <p>{{problem[1]}}</p>
-    <form method="POST">
-        <input type="text" placeholder="Ваш ответ" name="answer">
-        <button type="submit" name={{problem[0]}}>Сдать
-            задачу</button>
-    </form>
+<table>
+{% for id, text, status in problems %}
+    <tr>
+        <td>
+            <p>{{text}}</p>
+            <form method="POST">
+                <input type="text" placeholder="Ваш ответ" name="answer">
+                {% if status == 0 or status == 1 %}
+                <button disabled type="submit" name={{id}}>Сдать
+                    задачу</button>
+                {% else %}
+                <button type="submit" name={{id}}>Сдать
+                    задачу</button>
+                {% endif %}
+            </form>
+        </td>
+        <td>
+            {% if status == 0 %}
+            <p>ок</p>
+            {% elif status == 1 %}
+            <p>неверно</p>
+            {% else %}
+            <p>на проверке</p>
+            {% endif %}
+        </td>
+    </tr>
 {% endfor %}
+</table>
+<a href="/results">А вот и результаты!</a>
 </body>
 </html>
