@@ -6,6 +6,7 @@
 </head>
 <body>
     {% for team, result, sum in results %}
+    <div align="center">
     <h2>{{team}}</h2>
     <table border="1">
         {% for row in result %}
@@ -18,7 +19,9 @@
 
     </table>
     <p>Итог:{{sum[1]}}={{sum[0]}}</p>
+    </div>
 {% endfor %}
+<div align="center">
 <table border="1">
     <tr>
         {% for team in teams %}
@@ -31,5 +34,6 @@
         {% endfor %}
     </tr>
 </table>
+</div>
 </body>
 </html>
