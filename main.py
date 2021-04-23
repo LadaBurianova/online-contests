@@ -4,6 +4,7 @@ from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction.teams import User
 from db_interaction.contests import SolvingProcess
+from db_interaction.problems import Problem
 from random import shuffle
 
 
@@ -69,16 +70,15 @@ def logout():
 @app.route('/check', methods=['GET', 'POST'])
 def check():
     if request.method == 'POST':
-        ok = request.form.get('accept')
-
-        print(ok)
-
+        data = request.form.to_dict()
+        print(data)
     db_sess = __db_session.create_session()
     data = []
-    i = db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2).first()
-    print(i)
-    d = [i.team_id, i.problem_id, i.problem.correct_answer, i.answer]  # i.problem.correct_answer, i.answer
-    return render_template("checking_page.html", answers=d)
+    for i in db_sess.query(SolvingProcess).filter(SolvingProcess.ok == 2):
+        pr = i.problem_id
+        print(pr)
+        data.append([i.team_id, i.problem_id, pr.correct_answer, i.answer])  # i.problem.correct_answer, i.answer
+    return render_template("checking_page.html", answers=data)
 
 
 if __name__ == "__main__":

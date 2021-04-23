@@ -9,19 +9,21 @@
         <th>ОТВЕТ КОМАНДЫ</th>
         <th>ПРОВЕРКА</th>
     </tr>
+    {% for item in answers %}
+
     <tr>
-        {% for cl in answers %}
+        <form action="/check" method="POST">
+        {% for cl in item %}
         <td>
         {{ cl }}
         </td>
         {% endfor %}
         <td>
-        <form action="/check" method="POST">
-            <input type="checkbox" id="accept" name="accept">
-            <label class="form-check-label" for="accept">correct</label>
-            <input type="submit">
+            <input type="submit" name="0" value='1'>
+            <input type="submit" name="0" value="0">
         </form>
         </td>
     </tr>
+    {% endfor %}
 </table>
 {% endblock %}

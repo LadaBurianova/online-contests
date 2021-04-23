@@ -25,18 +25,9 @@ def add_from_json():
 def add_to_solving_process():
     __db_session.global_init("db_interaction/users_data.db")
     db_sess = __db_session.create_session()
-    process1 = __all_tables.contests.SolvingProcess()
-    process2 = __all_tables.contests.SolvingProcess()
-    process1.ok = 2
-    process2.ok = 2
-    process1.problem_id = process2.problem_id = 1
-    process1.answer = '4'
-    process2.answer = 'не знаю'
-    process1.team_id = 1
-    process2.team_id = 2
-    process1.problem_id = 1
-    process2.problem_id = 1
 
+    process1 = __all_tables.contests.SolvingProcess(team_id=1, problem_id=1, ok=2, answer='4')
+    process2 = __all_tables.contests.SolvingProcess(team_id=2, problem_id=1, ok=2, answer='не знаю')
     db_sess.add(process1)
     db_sess.add(process2)
     db_sess.commit()
