@@ -65,7 +65,7 @@ def solving():
     if request.method == 'POST':
         check_answers(dict(request.form), 'TEAM')   # ADD WHICH TEAM SUBMITTED
         return redirect('/solving')
-    return render_template('thing.html', problems=[])   # ADD PROBLEMS
+    return render_template('solving.html', problems=[])   # ADD PROBLEMS
 
 
 @app.route('/logout')
