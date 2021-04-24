@@ -5,6 +5,7 @@ from .__db_session import SqlAlchemyBase
 import sqlalchemy.orm as orm
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from random import sample
 
 
 class Team(SqlAlchemyBase):
@@ -15,6 +16,13 @@ class Team(SqlAlchemyBase):
     results = Column('data', JSON)
     user = orm.relation('User', back_populates='team')
     solving_process = orm.relation('SolvingProcess', back_populates='team')
+
+    def generate_secret_code(self):
+        smb = 'zxcvbnmasdfghjkklqwertyuip123456789+=*/%'.split()
+        self.secret_code = ''.join(sample(smb, 8))  # вероятность совпадения порядка 0,00000001
+
+    def check_secret_code(self, secret_code):
+        return check_password_hash(self.secret_code, secret_code)
 
 
 class User(SqlAlchemyBase, UserMixin):

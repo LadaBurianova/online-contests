@@ -1,12 +1,13 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction.teams import User
 from db_interaction.contests import SolvingProcess
-from db_interaction.problems import Problem
-from db_interaction.teams import Team
-from random import shuffle
+from werkzeug.security import generate_password_hash
+from db_interaction import extract_and_calc_results
+
+ADMIN_PASSWORD = generate_password_hash('password123')  # no ability to enter password from interface now
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -21,7 +22,7 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/main', methods=['GET', 'POST'])
 def main_page():
     return render_template('startpage.html', links=[], css=url_for('static', filename='css/style.css'))
 
@@ -83,8 +84,7 @@ def solving():
     data = []
     for i in db_sess.query(Problem):
         if db_sess.query(SolvingProcess).filter(
-                SolvingProcess.team_id == i.id).first() is not None:
-            print(i, i.solving_process)
+                i.id == SolvingProcess.problem.id).first() is not None:
             status = i.solving_process.ok
         else:
             status = ''
@@ -121,14 +121,18 @@ def check():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
+    db_sess = __db_session.create_session()
+    res = extract_and_calc_results.all_results(db_sess)
+    teams = [(el[0], el[2][0]) for el in res]
     return render_template('results.html',  # ADD BOTH LISTS
-                           results=[('команда1', [
-                               [1, 2, 3, 4],
-                               [5, 6, 7, 8],
-                               [9, 10, 11, 12],
-                               [13, 14, 15, 16]
-                           ], (136, '1+4+1+130'))],
-                           teams=[('команда1', 136)])
+                           results=res,
+                           teams=teams)
+
+
+"""[('команда1', [[1, 2, 3, 4],
+                   [5, 6, 7, 8],
+                   [9, 10, 11, 12],
+                   [13, 14, 15, 16]], (136, '1+4+1+130'))]"""
 
 
 @app.route('/logout', methods=['GET', 'POST'])
