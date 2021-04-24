@@ -23,13 +23,15 @@
                 {% endif %}
             </form>
         </td>
-        <td>
+        <td align="bottom">
             {% if status == 0 %}
             <p>ок</p>
             {% elif status == 1 %}
             <p>неверно</p>
-            {% else %}
+            {% elif status == 2 %}
             <p>на проверке</p>
+            {% else %}
+            <p></p>
             {% endif %}
         </td>
     </tr>

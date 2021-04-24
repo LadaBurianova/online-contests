@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
@@ -124,15 +124,9 @@ def results():
     db_sess = __db_session.create_session()
     res = extract_and_calc_results.all_results(db_sess)
     teams = [(el[0], el[2][0]) for el in res]
-    return render_template('results.html',  # ADD BOTH LISTS
+    return render_template('results.html',
                            results=res,
                            teams=teams)
-
-
-"""[('команда1', [[1, 2, 3, 4],
-                   [5, 6, 7, 8],
-                   [9, 10, 11, 12],
-                   [13, 14, 15, 16]], (136, '1+4+1+130'))]"""
 
 
 @app.route('/logout', methods=['GET', 'POST'])
