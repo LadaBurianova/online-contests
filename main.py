@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
