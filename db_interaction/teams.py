@@ -18,7 +18,7 @@ class Team(SqlAlchemyBase):
     solving_process = orm.relation('SolvingProcess', back_populates='team')
 
     def generate_secret_code(self):
-        smb = 'zxcvbnmasdfghjkklqwertyuip123456789+=*/%'.split()
+        smb = list('zxcvbnmasdfghjkklqwertyuip123456789+=*/%')
         self.secret_code = ''.join(sample(smb, 8))  # вероятность совпадения порядка 0,00000001
 
     def check_secret_code(self, secret_code):

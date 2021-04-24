@@ -3,10 +3,9 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction import __all_tables
-from werkzeug.security import generate_password_hash
 from db_interaction import extract_and_calc_results
+from db_interaction import constants
 
-ADMIN_PASSWORD = generate_password_hash('password123')  # no ability to enter password from interface now
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
