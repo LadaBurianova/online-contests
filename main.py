@@ -16,10 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-def check_answers(answer, team):  # HERE YOU CHECK ANSWERS
-    print(answer['answer'])
-
-
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = __db_session.create_session()
@@ -71,9 +67,20 @@ def solving():
     if request.method == 'POST':
         check_answers(dict(request.form), 'TEAM')  # ADD WHICH TEAM SUBMITTED
         return redirect('/solving')
-    return render_template('solving.html', problems=[
-        (1, 'blah blah blah', 0), (2, 'something something', 1), (3, 'nvm', 2)
-    ])  # ADD PROBLEMS
+    db_sess = __db_session.create_session()
+    data = []
+    for i in db_sess.query(Problem):
+        if db_sess.query(SolvingProcess).filter(
+                i.id == SolvingProcess.problem.id).first() is not None:
+            status = i.solving_process.ok
+        else:
+            status = ''
+        data.append([
+            str(i.id + '&' + i.solving_process.team.id),
+            str(i.problem.problem_text),
+            str(status)
+        ])
+    return render_template('solving.html', problems=data)
 
 
 @app.route('/check', methods=['GET', 'POST'])
