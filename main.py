@@ -65,7 +65,7 @@ def register():
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
     db_sess = __db_session.create_session()
-    team = db_sess.query(__all_tables.teams.Team).filter()
+    team = db_sess.query(__all_tables.teams.Team).filter(__all_tables.teams.Team.id == 1).first()  # just for testing
     if request.method == 'POST':
         data = request.form.to_dict()
         answer = data['answer']
@@ -77,22 +77,21 @@ def solving():
         solving_process.team = db_sess.query(__all_tables.teams.Team).filter(__all_tables.teams.Team.id ==
                                                           t_id).first()
         solving_process.answer = answer
-        solving_process.ok = 2
+        solving_process.ok = 3
         db_sess.commit()
         return redirect('/solving')
     db_sess = __db_session.create_session()
     data = []
     for i in db_sess.query(__all_tables.problems.Problem):
         print(i)
-        if db_sess.query(__all_tables.contests.SolvingProcess).filter(
-                __all_tables.contests.SolvingProcess.team_id == i.id).first() is not None:
-            print(i, i.solving_process)
-            status = i.solving_process.ok
+        sp = db_sess.query(__all_tables.contests.SolvingProcess).filter(__all_tables.contests.SolvingProcess.team_id == team.id, __all_tables.contests.SolvingProcess.problem_id == i.id).first()
+        if sp is not None:
+            status = sp.ok
         else:
             status = ''
         data.append([
-            str(i.id + '&' + i.solving_process.team.id),
-            str(i.problem.problem_text),
+            str(i.id) + '&' + str(sp.team_id),
+            str(i.problem_text),
             str(status)
         ])
     return render_template('solving.html', problems=data)
