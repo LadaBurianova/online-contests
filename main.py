@@ -1,11 +1,11 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction import __all_tables
 from db_interaction import extract_and_calc_results
 from db_interaction import constants
-
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -27,13 +27,15 @@ def main_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """redirects to checking if correct ADMIN PASSWORD added; else redirects to solving"""
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = __db_session.create_session()
         user = db_sess.query(__all_tables.teams.User).filter(__all_tables.teams.User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            if form.secret_code == constants.ADMIN_PASSWORD:
+            print(form.secret_code.data)
+            if generate_password_hash(form.secret_code.data) == constants.ADMIN_PASSWORD:
                 return redirect('/checking')
             return redirect('/solving')
         return render_template('login_form.html',
@@ -73,9 +75,9 @@ def solving():
             0].split('&')
         solving_process = __all_tables.contests.SolvingProcess()
         solving_process.problem = db_sess.query(__all_tables.problems.Problem).filter(__all_tables.problems.Problem.id
-                                                                == p_id).first()
+                                                                                      == p_id).first()
         solving_process.team = db_sess.query(__all_tables.teams.Team).filter(__all_tables.teams.Team.id ==
-                                                          t_id).first()
+                                                                             t_id).first()
         solving_process.answer = answer
         solving_process.ok = 3
         db_sess.commit()
@@ -84,7 +86,9 @@ def solving():
     data = []
     for i in db_sess.query(__all_tables.problems.Problem):
         print(i)
-        sp = db_sess.query(__all_tables.contests.SolvingProcess).filter(__all_tables.contests.SolvingProcess.team_id == team.id, __all_tables.contests.SolvingProcess.problem_id == i.id).first()
+        sp = db_sess.query(__all_tables.contests.SolvingProcess).filter(
+            __all_tables.contests.SolvingProcess.team_id == team.id,
+            __all_tables.contests.SolvingProcess.problem_id == i.id).first()
         if sp is not None:
             status = sp.ok
         else:
