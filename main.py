@@ -23,7 +23,7 @@ def load_user(user_id):
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    return render_template('startpage.html', links=[])
+    return render_template('startpage.html', links=[], css=url_for('static', filename='css/style.css'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
