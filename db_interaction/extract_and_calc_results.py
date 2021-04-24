@@ -15,7 +15,7 @@ def team_results(team, db_sess):
 
     for solving in db_sess.query(__all_tables.contests.SolvingProcess).filter(
             (__all_tables.contests.SolvingProcess.ok == 1) | (__all_tables.contests.SolvingProcess.ok == 0)):
-        n, m = convert_indexes(solving.problem.category, solving.problem.number)
+        n, m = convert_indexes(solving.problem.category, solving.problem.number // 10 - 1)
         table[n][m] = solving.ok
     for line in table:
         if '?' not in line and 0 not in line:
