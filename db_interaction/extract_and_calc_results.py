@@ -1,4 +1,3 @@
-from . import __db_session
 from . import __all_tables
 import json
 
@@ -59,7 +58,3 @@ def convert_indexes(ct, pr):
     else:
         ct = 3
     return ct, pr
-
-
-def print_table(table):  # just for test
-    pass

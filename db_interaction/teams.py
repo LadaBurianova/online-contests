@@ -20,12 +20,9 @@ class Team(SqlAlchemyBase):
     def generate_secret_code(self):
         smb = 'zxcvbnmasdfghjkklqwertyuip123456789+=*/%'.split()
         self.secret_code = ''.join(sample(smb, 8))  # вероятность совпадения порядка 0,00000001
-        if check_password_hash(ADMIN_PASSWORD, k):
-            pass
 
     def check_secret_code(self, secret_code):
         return check_password_hash(self.secret_code, secret_code)
-
 
 
 class User(SqlAlchemyBase, UserMixin):
