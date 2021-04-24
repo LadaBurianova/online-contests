@@ -5,6 +5,7 @@ from db_interaction import __db_session
 from db_interaction.teams import User
 from db_interaction.contests import SolvingProcess
 from db_interaction.problems import Problem
+from db_interaction.teams import Team
 from random import shuffle
 
 app = Flask(__name__)
@@ -12,10 +13,6 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-def check_answers(answer, team):  # HERE YOU CHECK ANSWERS
-    print(answer['answer'])
 
 
 @login_manager.user_loader
@@ -67,11 +64,33 @@ def register():
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
     if request.method == 'POST':
-        check_answers(dict(request.form), 'TEAM')  # ADD WHICH TEAM SUBMITTED
+        db_sess = __db_session.create_session()
+        data = request.form.to_dict()
+        answer = data['answer']
+        p_id, t_id = list(filter(lambda a: a != 'answer', data.keys()))[
+            0].split('&')
+        solving_process = SolvingProcess()
+        solving_process.problem = db_sess.query(Problem).filter(Problem.id
+                                                                == p_id).first()
+        solving_process.team = db_sess.query(Team).filter(Team.id ==
+                                                          t_id).first()
+        solving_process.answer = answer
+        db_sess.commit()
         return redirect('/solving')
-    return render_template('solving.html', problems=[
-        (1, 'blah blah blah', 0), (2, 'something something', 1), (3, 'nvm', 2)
-    ])  # ADD PROBLEMS
+    db_sess = __db_session.create_session()
+    data = []
+    for i in db_sess.query(Problem):
+        if db_sess.query(SolvingProcess).filter(
+                i.id == SolvingProcess.problem.id).first() is not None:
+            status = i.solving_process.ok
+        else:
+            status = ''
+        data.append([
+            str(i.id + '&' + i.solving_process.team.id),
+            str(i.problem.problem_text),
+            str(status)
+        ])
+    return render_template('solving.html', problems=data)
 
 
 @app.route('/check', methods=['GET', 'POST'])
