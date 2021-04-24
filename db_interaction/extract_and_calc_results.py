@@ -4,7 +4,7 @@ from . import constants
 
 
 def team_results(team, db_sess):
-    """returns abaka table"""
+    """returns abaka table for one team"""
     line_bonus = 0
     column_bonus = 0
 
@@ -24,7 +24,7 @@ def team_results(team, db_sess):
             if table[row][col] == '?' or table[row][col] == 0:
                 b = False
             else:
-                res += 1
+                res += (col + 1) * 10
         if b:
             column_bonus += (col + 1) * 10
     team.results = json.dumps(table)
@@ -33,6 +33,7 @@ def team_results(team, db_sess):
 
 
 def all_results(db_sess):
+    """returns abaka tables for all teams """
     data = []
     for team in db_sess.query(__all_tables.teams.Team):
         table, res = team_results(team, db_sess)
@@ -42,6 +43,9 @@ def all_results(db_sess):
 
 
 def return_res_and_str(res, line_bonus, column_bonus):
+    """res - summ of scores for all correct problems;
+       line_bonus - summ of bonuses for lines;
+       line_bonus - summ of bonuses for columns"""
     s = str(res) + '+' + str(line_bonus) + '+' + str(column_bonus)
     return eval(s), s
 

@@ -14,7 +14,7 @@
             <p>{{text}}</p>
             <form method="POST">
                 <input type="text" placeholder="Ваш ответ" name="answer">
-                {% if status == 0 or status == 1 %}
+                {% if status == 0 or status == 1 or status == 2 %}
                 <button disabled type="submit" name={{id}}>Сдать
                     задачу</button>
                 {% else %}

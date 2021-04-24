@@ -21,7 +21,7 @@ def load_user(user_id):
     return db_sess.query(__all_tables.teams.User).get(user_id)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/main', methods=['GET', 'POST'])
 def main_page():
     return render_template('startpage.html', links=[],
                            css=url_for('static', filename='css/style.css'))
@@ -101,7 +101,7 @@ def solving():
                 str(i.problem_text),
                 str(status)
             ])
-        return render_template('solving.html', problems=data)
+        return render_template('solving.html', problems=data, css=url_for('static', filename='css/style.css'))
     return redirect('/login')
 
 
@@ -136,7 +136,7 @@ def results():
     teams = [(el[0], el[2][0]) for el in res]
     return render_template('results.html',
                            results=res,
-                           teams=teams)
+                           teams=teams, css=url_for('static', filename='css/style.css'))
 
 
 """[('команда1', [[1, 2, 3, 4],
