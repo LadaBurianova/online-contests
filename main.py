@@ -90,7 +90,8 @@ def solving():
             str(i.problem.problem_text),
             str(status)
         ])
-    return render_template('solving.html', problems=data)
+    return render_template('solving.html', problems=data, css=url_for(
+        'static', filename='css/style.css'))
 
 
 @app.route('/check', methods=['GET', 'POST'])
