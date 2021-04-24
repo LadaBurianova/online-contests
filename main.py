@@ -63,8 +63,9 @@ def register():
 
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
+    db_sess = __db_session.create_session()
+    team = db_sess.query(Team).filter()
     if request.method == 'POST':
-        db_sess = __db_session.create_session()
         data = request.form.to_dict()
         answer = data['answer']
         p_id, t_id = list(filter(lambda a: a != 'answer', data.keys()))[
@@ -75,13 +76,15 @@ def solving():
         solving_process.team = db_sess.query(Team).filter(Team.id ==
                                                           t_id).first()
         solving_process.answer = answer
+        solving_process.ok = 2
         db_sess.commit()
         return redirect('/solving')
-    db_sess = __db_session.create_session()
     data = []
     for i in db_sess.query(Problem):
+        print(i)
         if db_sess.query(SolvingProcess).filter(
-                i.id == SolvingProcess.problem.id).first() is not None:
+                SolvingProcess.team_id == i.id).first() is not None:
+            print(i, i.solving_process)
             status = i.solving_process.ok
         else:
             status = ''
@@ -90,6 +93,7 @@ def solving():
             str(i.problem.problem_text),
             str(status)
         ])
+        db_sess.commit()
     return render_template('solving.html', problems=data)
 
 
