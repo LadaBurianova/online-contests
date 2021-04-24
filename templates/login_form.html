@@ -30,7 +30,7 @@
     <p>
         {{ form.secret_code.label }}<br>
         {{ form.secret_code(class="form-control") }}<br>
-        {% for error in form.password.errors %}
+        {% for error in form.secret_code.errors %}
         <div class="alert alert-danger" role="alert">
             {{ error }}
         </div>
