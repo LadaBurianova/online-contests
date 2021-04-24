@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
@@ -64,14 +64,29 @@ def register():
 
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
+    db_sess = __db_session.create_session()
+    team = db_sess.query(__all_tables.teams.Team).filter()
     if request.method == 'POST':
-        check_answers(dict(request.form), 'TEAM')  # ADD WHICH TEAM SUBMITTED
+        data = request.form.to_dict()
+        answer = data['answer']
+        p_id, t_id = list(filter(lambda a: a != 'answer', data.keys()))[
+            0].split('&')
+        solving_process = __all_tables.contests.SolvingProcess()
+        solving_process.problem = db_sess.query(__all_tables.problems.Problem).filter(__all_tables.problems.Problem.id
+                                                                == p_id).first()
+        solving_process.team = db_sess.query(__all_tables.teams.Team).filter(__all_tables.teams.Team.id ==
+                                                          t_id).first()
+        solving_process.answer = answer
+        solving_process.ok = 2
+        db_sess.commit()
         return redirect('/solving')
     db_sess = __db_session.create_session()
     data = []
     for i in db_sess.query(__all_tables.problems.Problem):
+        print(i)
         if db_sess.query(__all_tables.contests.SolvingProcess).filter(
-                i.id == __all_tables.contests.SolvingProcess.problem.id).first() is not None:
+                __all_tables.contests.SolvingProcess.team_id == i.id).first() is not None:
+            print(i, i.solving_process)
             status = i.solving_process.ok
         else:
             status = ''
