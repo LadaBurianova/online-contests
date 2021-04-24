@@ -4,9 +4,10 @@ from forms.user import RegistrationForm, LoginForm
 from db_interaction import __db_session
 from db_interaction.teams import User
 from db_interaction.contests import SolvingProcess
-from db_interaction.problems import Problem
-from db_interaction.teams import Team
-from random import shuffle
+from werkzeug.security import generate_password_hash
+from db_interaction import extract_and_calc_results
+
+ADMIN_PASSWORD = generate_password_hash('password123')  # no ability to enter password from interface now
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -21,7 +22,7 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/main', methods=['GET', 'POST'])
 def main_page():
     return render_template('startpage.html', links=[])
 
@@ -64,18 +65,7 @@ def register():
 @app.route('/solving', methods=['GET', 'POST'])
 def solving():
     if request.method == 'POST':
-        db_sess = __db_session.create_session()
-        data = request.form.to_dict()
-        answer = data['answer']
-        p_id, t_id = list(filter(lambda a: a != 'answer', data.keys()))[
-            0].split('&')
-        solving_process = SolvingProcess()
-        solving_process.problem = db_sess.query(Problem).filter(Problem.id
-                                                                == p_id).first()
-        solving_process.team = db_sess.query(Team).filter(Team.id ==
-                                                          t_id).first()
-        solving_process.answer = answer
-        db_sess.commit()
+        check_answers(dict(request.form), 'TEAM')  # ADD WHICH TEAM SUBMITTED
         return redirect('/solving')
     db_sess = __db_session.create_session()
     data = []
@@ -116,14 +106,18 @@ def check():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
+    db_sess = __db_session.create_session()
+    res = extract_and_calc_results.all_results(db_sess)
+    teams = [(el[0], el[2][0]) for el in res]
     return render_template('results.html',  # ADD BOTH LISTS
-                           results=[('команда1', [
-                               [1, 2, 3, 4],
-                               [5, 6, 7, 8],
-                               [9, 10, 11, 12],
-                               [13, 14, 15, 16]
-                           ], (136, '1+4+1+130'))],
-                           teams=[('команда1', 136)])
+                           results=res,
+                           teams=teams)
+
+
+"""[('команда1', [[1, 2, 3, 4],
+                   [5, 6, 7, 8],
+                   [9, 10, 11, 12],
+                   [13, 14, 15, 16]], (136, '1+4+1+130'))]"""
 
 
 @app.route('/logout', methods=['GET', 'POST'])
