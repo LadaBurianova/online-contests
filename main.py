@@ -33,7 +33,9 @@ def login():
         user = db_sess.query(__all_tables.teams.User).filter(__all_tables.teams.User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect('/')
+            if form.secret_code == constants.ADMIN_PASSWORD:
+                return redirect('/checking')
+            return redirect('/solving')
         return render_template('login_form.html',
                                message="Неправильный логин или пароль",
                                form=form)
