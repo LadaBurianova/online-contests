@@ -4,7 +4,7 @@ body {
 	repeat: repeat-y;
 }
 
-p, h1, h2, ul, a {
+p, h1, h2, h3, ul, a {
 	font-family: 'Century Gothic', sans-serif;
 	color: rgba(255, 255, 255, 127);
 	font-weight: bold;
