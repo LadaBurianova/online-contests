@@ -1,3 +1,16 @@
 body {
 	background-image: url("bg.png");
+	background-size: cover;
+	repeat: repeat-y;
+}
+
+p, h1, h2, ul, a {
+	font-family: 'Century Gothic', sans-serif;
+	color: rgba(255, 255, 255, 127);
+	font-weight: bold;
+}
+
+.link {
+	font-weight: 900;
+	font-size: 40px;
 }
