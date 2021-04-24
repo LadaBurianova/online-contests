@@ -1,8 +1,6 @@
 from . import __all_tables
 import json
-
-CATEGORIES = ('арифметика', '1', '2', '3')
-SCORES = ('10', '20', '30', '40')
+from . import constants
 
 
 def team_results(team, db_sess):
@@ -15,7 +13,7 @@ def team_results(team, db_sess):
 
     for solving in db_sess.query(__all_tables.contests.SolvingProcess).filter(
             (__all_tables.contests.SolvingProcess.ok == 1) | (__all_tables.contests.SolvingProcess.ok == 0)):
-        n, m = convert_indexes(solving.problem.category, solving.problem.number)
+        n, m = convert_indexes(solving.problem.category, solving.problem.number // 10 - 1)
         table[n][m] = solving.ok
     for line in table:
         if '?' not in line and 0 not in line:
@@ -49,11 +47,11 @@ def return_res_and_str(res, line_bonus, column_bonus):
 
 
 def convert_indexes(ct, pr):
-    if ct == CATEGORIES[0]:
+    if ct == constants.CATEGORIES[0]:
         ct = 0
-    elif ct == CATEGORIES[1]:
+    elif ct == constants.CATEGORIES[1]:
         ct = 1
-    elif ct == CATEGORIES[2]:
+    elif ct == constants.CATEGORIES[2]:
         ct = 2
     else:
         ct = 3
